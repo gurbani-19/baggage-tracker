@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Baggage Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            color: #333;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select, button {
+            margin-bottom: 10px;
+            padding: 8px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .status {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Baggage Tracker</h1>
+    
+    <div class="container">
+        <h2>Register Bag</h2>
+        <form id="registerForm">
+            <label for="tag_number">Tag Number:</label>
+            <input type="text" id="tag_number" required>
+            
+            <label for="passenger_name">Passenger Name:</label>
+            <input type="text" id="passenger_name">
+            
+            <label for="flight_number">Flight Number:</label>
+            <input type="text" id="flight_number">
+            
+            <label for="origin">Origin:</label>
+            <input type="text" id="origin">
+            
+            <label for="destination">Destination:</label>
+            <input type="text" id="destination">
+            
+            <button type="submit">Register</button>
+        </form>
+    </div>
+    
+    <div class="container">
+        <h2>Scan Checkpoint</h2>
+        <form id="scanForm">
+            <label for="bag_id">Bag ID:</label>
+            <input type="text" id="bag_id" required>
+            
+            <label for="checkpoint">Checkpoint:</label>
+            <select id="checkpoint" required></select>
+            
+            <label for="location">Location:</label>
+            <input type="text" id="location">
+            
+            <label for="status_note">Note:</label>
+            <input type="text" id="status_note">
+            
+            <button type="submit">Record Scan</button>
+        </form>
+    </div>
+    
+    <div class="container">
+        <h2>Bag Status</h2>
+        <form id="statusForm">
+            <label for="status_bag_id">Bag ID:</label>
+            <input type="text" id="status_bag_id" required>
+            
+            <button type="submit">Get Status</button>
+        </form>
+        
+        <div id="statusResult" class="status"></div>
+    </div>
+
+    <script>
+        // Base URL for API
+        const API_URL = 'http://localhost:8000';
+        
+        // Load checkpoints on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch(`${API_URL}/checkpoints`);
+                const checkpoints = await response.json();
+                
+                const checkpointSelect = document.getElementById('checkpoint');
+                checkpoints.forEach(checkpoint => {
+                    const option = document.createElement('option');
+                    option.value = checkpoint;
+                    option.textContent = checkpoint;
+                    checkpointSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading checkpoints:', error);
+                alert('Failed to load checkpoints. Please check if the backend is running.');
+            }
+        });
+        
+        // Register bag
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const payload = {
+                tag_number: document.getElementById('tag_number').value,
+                passenger_name: document.getElementById('passenger_name').value,
+                flight_number: document.getElementById('flight_number').value,
+                origin: document.getElementById('origin').value,
+                destination: document.getElementById('destination').value
+            };
+            
+            try {
+                const response = await fetch(`${API_URL}/registerBag`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                alert(`Bag registered successfully! ID: ${data.id}`);
+                document.getElementById('registerForm').reset();
+            } catch (error) {
+                console.error('Error registering bag:', error);
+                alert('Failed to register bag. Please check if the backend is running.');
+            }
+        });
+        
+        // Scan checkpoint
+        document.getElementById('scanForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const payload = {
+                bag_id: document.getElementById('bag_id').value,
+                checkpoint: document.getElementById('checkpoint').value,
+                location: document.getElementById('location').value,
+                status_note: document.getElementById('status_note').value
+            };
+            
+            try {
+                const response = await fetch(`${API_URL}/scanCheckpoint`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                alert('Checkpoint scan recorded successfully!');
+                document.getElementById('scanForm').reset();
+            } catch (error) {
+                console.error('Error scanning checkpoint:', error);
+                alert('Failed to record checkpoint scan. Please check if the backend is running.');
+            }
+        });
+        
+        // Get status
+        document.getElementById('statusForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const bagId = document.getElementById('status_bag_id').value;
+            
+            try {
+                const response = await fetch(`${API_URL}/getStatus/${bagId}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Display status
+                const statusResult = document.getElementById('statusResult');
+                
+                let html = `
+                    <h3>Bag Details</h3>
+                    <p>Tag: ${data.bag.tag_number}</p>
+                    <p>Passenger: ${data.bag.passenger_name || 'N/A'}</p>
+                    <p>Flight: ${data.bag.flight_number || 'N/A'}</p>
+                    <p>Origin: ${data.bag.origin || 'N/A'}</p>
+                    <p>Destination: ${data.bag.destination || 'N/A'}</p>
+                    
+                    <h3>Latest Checkpoint</h3>
+                `;
+                
+                if (data.latest_checkpoint) {
+                    html += `
+                        <p>Checkpoint: ${data.latest_checkpoint.checkpoint}</p>
+                        <p>Location: ${data.latest_checkpoint.location || 'N/A'}</p>
+                        <p>Scanned at: ${new Date(data.latest_checkpoint.scanned_at).toLocaleString()}</p>
+                    `;
+                } else {
+                    html += '<p>No checkpoint recorded</p>';
+                }
+                
+                html += `
+                    <h3>Next Stage</h3>
+                    <p>${data.next_stage || 'N/A'}</p>
+                    
+                    <h3>History</h3>
+                    <ol>
+                `;
+                
+                if (data.history.length > 0) {
+                    data.history.forEach(h => {
+                        html += `<li>${h.checkpoint} - ${h.location || 'N/A'} - ${new Date(h.scanned_at).toLocaleString()}</li>`;
+                    });
+                } else {
+                    html += '<li>No history available</li>';
+                }
+                
+                html += '</ol>';
+                
+                statusResult.innerHTML = html;
+            } catch (error) {
+                console.error('Error getting status:', error);
+                document.getElementById('statusResult').innerHTML = '<p>Failed to get bag status. Please check if the backend is running.</p>';
+            }
+        });
+    </script>
+</body>
+</html>

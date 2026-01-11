@@ -1,0 +1,8 @@
+#! 0-baggage-tracker-namespace.yaml
+# Generated code, do not edit
+apiVersion: v1
+kind: Namespace
+metadata:
+    name: baggage-tracker
+    labels:
+        com.docker.compose.project: baggage-tracker

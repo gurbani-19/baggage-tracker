@@ -1,0 +1,35 @@
+#! backend-deployment.yaml
+# Generated code, do not edit
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: backend
+    namespace: baggage-tracker
+    labels:
+        com.docker.compose.project: baggage-tracker
+        com.docker.compose.service: backend
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            com.docker.compose.project: baggage-tracker
+            com.docker.compose.service: backend
+    strategy:
+        type: Recreate
+    template:
+        metadata:
+            labels:
+                com.docker.compose.project: baggage-tracker
+                com.docker.compose.service: backend
+                com.docker.compose.network.default: "true"
+        spec:
+            containers:
+                - name: backend
+                  image: baggage-tracker-backend
+                  imagePullPolicy: IfNotPresent
+                  env:
+                    - name: DATABASE_URL
+                      value: "postgresql+asyncpg://postgres:postgres@db:5432/baggage_db"
+                  ports:
+                    - name: backend-8000
+                      containerPort: 8000
