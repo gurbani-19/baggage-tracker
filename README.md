@@ -220,7 +220,23 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📝 License
 
-This project is open source and available under the [MIT License](LICENSE).
+This project is available under a **Non-Commercial License**. 
+
+**Permitted Uses:**
+- ✅ Students and learners for educational purposes
+- ✅ Recruiters for evaluation purposes
+- ✅ Academic institutions for teaching
+
+**Prohibited Uses:**
+- ❌ Commercial use of any kind
+- ❌ Selling or monetizing this code
+- ❌ Using in revenue-generating products/services
+- ❌ Filing patents without explicit permission
+
+**Commercial/Patent Restrictions:**
+Any commercial use, product development, or patent application requires explicit written permission from the author. The author must be included as co-author/co-inventor in any patents derived from this work.
+
+See [LICENSE](LICENSE) for full terms.
 
 ## 👤 Author
 
