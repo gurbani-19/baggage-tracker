@@ -9,7 +9,11 @@ from .models import get_next_stage
 from .qrcode_gen import get_qr_code_response
 from .state_derivation import derive_operational_state
 
-app = FastAPI(title="Baggage Tracker")
+app = FastAPI(
+    title="Baggage Tracker",
+    description="Professional baggage tracking and management system with automation - Created by Gurbani",
+    version="1.0.0"
+)
 
 # Add CORS middleware
 app.add_middleware(

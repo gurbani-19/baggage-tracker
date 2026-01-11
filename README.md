@@ -47,7 +47,7 @@ A professional, production-ready baggage tracking and management system with aut
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/baggage-tracker.git
+   git clone https://github.com/gurbani/baggage-tracker.git
    cd baggage-tracker
    ```
 
@@ -190,7 +190,6 @@ pytest
 
 ## 📚 Documentation
 
-- [Project Documentation](PROJECT_DOCUMENTATION.md) - Complete technical documentation
 - [User Guide](USER_GUIDE.md) - How to use the application
 - [Automation Guide](AUTOMATION_GUIDE.md) - Automation features
 - [State Derivation](STATE_DERIVATION_README.md) - State interpretation system
@@ -225,7 +224,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## 👤 Author
 
-Your Name - [GitHub](https://github.com/yourusername)
+**Gurbani** - [GitHub](https://github.com/gurbani)
 
 ## 🙏 Acknowledgments
 
