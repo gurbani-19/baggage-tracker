@@ -225,7 +225,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## 👤 Author
 
-Your Name - [GitHub](https://github.com/yourusername)
+Gurbani Gambhir - [GitHub](https://github.com/gurbani-19)
 
 ## 🙏 Acknowledgments
 
