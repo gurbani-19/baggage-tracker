@@ -47,7 +47,7 @@ A professional, production-ready baggage tracking and management system with aut
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/gurbani/baggage-tracker.git
+   git clone https://github.com/gurbani-19/baggage-tracker.git
    cd baggage-tracker
    ```
 
@@ -224,7 +224,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## 👤 Author
 
-**Gurbani** - [GitHub](https://github.com/gurbani)
+**Gurbani Gambhir** - [GitHub](https://github.com/gurbani-19)
 
 ## 🙏 Acknowledgments
 
